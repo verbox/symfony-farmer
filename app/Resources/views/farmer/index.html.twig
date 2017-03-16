@@ -1,0 +1,11 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+    {% if user is empty %}
+        <p>Zaloguj się do gry.</p>
+    {% elseif animal_entries is empty %}
+        <p>W zagrodzie nie ma zwierząt.</p>
+    {% else %}
+        {{ include('farmer/_animal_list.html.twig',{'animal_entries' : animal_entries}) }}
+    {% endif %}
+{% endblock %}

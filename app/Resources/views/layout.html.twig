@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-2" />
+  <meta http-equiv="Content-Language" content="pl" />
+  <meta name="Keywords" content="słowa, kluczowe, oddzielone, przecinkami" />
+  <meta name="Description" content="krótki opis zawartości strony" />
+  <meta name="Robots" content="ALL" />
+  <meta name="Author" content="flankerds.com" />
+  <link rel="stylesheet" href="{{ asset('css/style.css')}}" type="text/css" />
+  <title>{% block title_browser %}{% endblock %}</title>
+</head>
+
+<body>
+<div id="kontener">
+<div id="naglowek"></div>
+<div id="menu">
+    {% block menu_up %}
+ {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+     <a href="{{ path('fos_user_security_logout') }}">Wyloguj</a>
+     <a href="{{ path('fos_user_profile_edit')}}">Profil-{{app.user.username}}</a>
+ {% else %}
+ <a href="{{ path('fos_user_security_login') }}">Zaloguj się</a>
+ {% endif %}
+ <a href="{{ path('index_action') }}">Strona Główna</a>
+ <a href="#">Inna Podstrona</a>
+ {% endblock %}
+</div>
+	
+<div id="tytul">
+      <h3>{% block title_header %}{% endblock %}</h3>
+</div>
+<div id="tresc">
+{% block content %} {% endblock %}
+{% block fos_user_content %} {% endblock %}
+</div>
+
+<div id="stopka">
+<div id="copyright">Copyright by Flankerds.com & PJ</div>
+<div id="design">Design by <a href="http://www.flankerds.com" target="_blank">flankerds.com</a></div>
+</div>
+</div>    
+</body>
+</html>

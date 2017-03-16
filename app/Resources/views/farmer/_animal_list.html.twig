@@ -1,0 +1,22 @@
+<div class="animals_table">
+    <table>
+        <tr>
+            <th>Zwierze</th>
+            <th>Liczebność</th>
+            <th>Wymień</th>
+        </tr>
+{% for entry in animal_entries %}
+    <tr>
+        
+        <td> {{entry.animal}}
+        </td>
+        
+        <td>
+            {{entry.count}}
+        </td>
+        <td><a href='#'>Wymień</a></td>
+    </tr>
+    
+{% endfor %}
+    </table>
+</div>
