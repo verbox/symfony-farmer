@@ -147,3 +147,13 @@ background:#6a7330;
 		padding-right:10px;
 		padding-top:10px;
 }
+
+.error_bag {
+    width: 90%;
+    background-color: #f8f8f8;
+    border-radius: 15px;
+}
+
+.error_bag ul li {
+    color: red;
+}

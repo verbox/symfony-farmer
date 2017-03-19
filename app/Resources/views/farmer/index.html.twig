@@ -6,7 +6,7 @@
         
     {% elseif herd is empty %}
         <p>Nie utworzono jeszcze zagrody.</p>
-        <p><a href="#">Utwórz zagrodę</a></p>
+        <p><a href="{{path('herd_new')}}">Utwórz zagrodę</a></p>
     {% else %}
         {% if animal_entries is empty %}
         <p>W zagrodzie nie ma zwierząt.</p>

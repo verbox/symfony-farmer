@@ -1,0 +1,20 @@
+<?php
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+namespace AppBundle\Repository\Interfaces;
+
+use AppBundle\Entity\Herd;
+use AppBundle\Entity\User;
+/**
+ * Description of HerdRepository
+ *
+ * @author learning
+ */
+interface HerdRepository {
+    function addAnimalsToHerd(Herd $herd, array $animal, int $count);
+    function addNewHerd(User $user, Herd $newHerd);
+}

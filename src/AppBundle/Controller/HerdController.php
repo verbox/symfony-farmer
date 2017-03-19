@@ -8,11 +8,13 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\RollDice;
-use AppBundle\Model\Animal\SimpleAnimalFactory;
+use AppBundle\Entity\Herd;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Description of HerdController
@@ -46,32 +48,36 @@ class HerdController extends Controller{
     }
     
     /**
-     * @Route("/rollDice/history",name="roll_dice_history")
+     * @Route("/herd/new", name="herd_new")
      * @Security("has_role('ROLE_USER')")
      */
-    public function rollDiceHistoryAction()
+    public function newHerdAction(Request $request) 
     {
-        $user = $this->getUser();
-        $herd = $user->getHerd();
-        $roll_dices = $herd->getRollDiceActions()->toArray();
-        return $this->render('farmer/roll_dice_history.html.twig', array('rdh' => $roll_dices));
+        if(!$this->getUser()->isHerdCreated()){
+        $herd = new Herd();
+        $herd->setName("Wpisz tutaj nazwę swojego nowego zwierzyńca.");
+        
+        $form = $this->createFormBuilder($herd)
+                ->add('name', TextType::class)
+                ->add('save', SubmitType::class, array('label' => 'Utwórz'))
+                ->getForm();
+        
+        $form->handleRequest($request);
+        
+        if ($form->isSubmitted() && $form->isValid()) {
+            $herd = $form->getData();
+            $hr = $this->get('app.herd_repository');
+            $hr->addNewHerd($this->getUser(),$herd);
+            return $this->redirectToRoute("index_action");
+        }
+        
+        return $this->render("farmer/herd_form.html.twig", 
+                array('form' => $form->createView(),));
+        }
+         return $this->redirectToRoute("index_action");
     }
     
-    /**
-     * @Route("/rollDice/new",name="roll_dice")
-     * @Security("has_role('ROLE_USER')")
-     */
-    public function rollDiceAction() {
-        $user = $this->getUser();
-        $herd = $user->getHerd();
-        $em = $this->getDoctrine()->getManager();
-        
-        $rollDice = new RollDice(SimpleAnimalFactory::getInstance()->randomAnimals(2),$herd);
-        $em->persist($rollDice);
-        $em->flush();
-        //$user->getHerd()->addAnimals("Rabbit",3,$em);
-        return $this->redirectToRoute("roll_dice_history");
-    }
+    
     
 
 }

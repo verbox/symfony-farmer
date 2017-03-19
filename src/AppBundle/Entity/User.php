@@ -55,7 +55,7 @@ class User extends BaseUser {
     
     public function canRollDice(): bool {
         /* TODO */
-        return true;
+        return $this->isHerdCreated();
     }
 
 

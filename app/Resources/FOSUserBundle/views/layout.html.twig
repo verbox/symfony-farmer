@@ -21,9 +21,9 @@
      <a href="{{ path('fos_user_profile_edit')}}">Profil-{{app.user.username}}</a>
  {% else %}
  <a href="{{ path('fos_user_security_login') }}">Zaloguj się</a>
+ <a href="{{ path('fos_user_registration_register') }}">Zarejestruj się</a>
  {% endif %}
- <a href="#">Strona Główna</a>
- <a href="#">Inna Podstrona</a>
+ <a href="{{ path('index_action') }}">Strona Główna</a>
  {% endblock %}
 </div>
 	
@@ -31,6 +31,9 @@
       <h3>{% block title_header %}{% endblock %}</h3>
 </div>
 <div id="tresc">
+{% block diagnostic_messages %}
+    {{include('farmer/_error_box.html.twig')}}
+{% endblock %}
 {% block content %} {% endblock %}
 {% block fos_user_content %} {% endblock %}
 </div>

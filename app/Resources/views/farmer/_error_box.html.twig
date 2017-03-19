@@ -1,0 +1,9 @@
+
+    <div class="error_bag">
+        <ul>
+    {% for msg in app.session.flashBag.get('error') %}
+        <li>{{msg}}</li>
+    {% endfor %}
+        </ul>
+    </div>
+

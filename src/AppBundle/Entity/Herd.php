@@ -47,6 +47,19 @@ class Herd implements PackableHerd{
      */
     private $rollDiceActions;
     
+    /**
+     * @ORM\Column(type="string",name="name")
+     */
+    private $name;
+    
+    function getName() {
+        return $this->name;
+    }
+
+    function setName($name) {
+        $this->name = $name;
+    }
+
     function __construct() {
         $this->animalEntries = new ArrayCollection();
         $this->rollDiceActions = new ArrayCollection();
