@@ -33,20 +33,29 @@ class User extends BaseUser {
      */
     private $herd;
     
-    function __construct() {
+    public function __construct() {
         parent::__construct();
     }
     
-    function getId(): int {
+    public function getId(): int {
         return $this->id;
     }
     
-    function getHerd(): Herd {
+    public function getHerd(): Herd {
         return $this->herd;
     }
 
-    function setHerd(Herd $herd) {
+    public function setHerd(Herd $herd) {
         $this->herd = $herd;
+    }
+    
+    public function isHerdCreated(): bool {
+        return !is_null($this->herd);
+    }
+    
+    public function canRollDice(): bool {
+        /* TODO */
+        return true;
     }
 
 

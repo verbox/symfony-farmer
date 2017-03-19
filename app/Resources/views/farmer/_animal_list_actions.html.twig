@@ -1,0 +1,7 @@
+{# roll of the dice #}
+{% if app.user.canRollDice %}
+    <p><a href="{{ path('roll_dice') }}">Rzuć kostką</a></p>
+    <p><a href="{{ path('roll_dice_history') }}">Historia rzutów</a></p>
+{% else %}
+    <p>Nie możesz rzucić kostką, zaczekaj XXX minut.</p>
+{% endif %}

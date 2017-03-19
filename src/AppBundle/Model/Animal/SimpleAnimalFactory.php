@@ -12,6 +12,15 @@ class SimpleAnimalFactory {
 
     private static $instance;
     private static $allAnimalsName = array("Rabbit", "Pig", "Sheep", "Horse", "Cow", "Dog", "BigDog", "Wolf", "Fox");
+    
+    public function randomAnimals(int $count) : array{
+        $result = array();
+        for($i = 0; $i < $count; ++$i)
+        {
+            $result[] = self::$allAnimalsName[rand() % 5];
+        }
+        return $result;
+    }
 
     private function __constructor() {
         
@@ -32,9 +41,9 @@ class SimpleAnimalFactory {
         return self::$instance;
     }
     
-    public function isValidAnimalName(AbstractAnimal $animal) : bool
+    public function isValidAnimalName(string $animal) : bool
     {
-        if (array_key_exists($animal->getKind(), SimpleAnimalFactory::$allAnimalsName))
+        if (in_array($animal, SimpleAnimalFactory::$allAnimalsName))
                 return true;
         return false;
     }

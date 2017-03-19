@@ -8,9 +8,10 @@
 
 namespace AppBundle\Entity;
 
-use Farmer\Animal\AbstractAnimal;
-use Farmer\Animal\SimpleAnimalFactory;
+use AppBundle\Model\Animal\AbstractAnimal;
+use AppBundle\Model\Animal\SimpleAnimalFactory;
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
 
 /**
  * Description of HerdEntry
@@ -46,11 +47,10 @@ class HerdEntry {
      */
     private $herd;
 
-    function __construct(AbstractAnimal $animalObj, int $count, Herd $herd) {
-        if (SimpleAnimalFactory::getInstance()->isValidAnimalName($animalObj)) {
-            $this->animal = $animalObj . getKind();
+    function __construct(string $animal, int $count) {
+        if (SimpleAnimalFactory::getInstance()->isValidAnimalName($animal)) {
+            $this->animal = $animal;
             $this->count = $count;
-            $this->herd = $herd;
         } else {
             throw new Exception("Problem with animals - bad animal name/object"
             . "while creating new herd entry");
@@ -61,7 +61,7 @@ class HerdEntry {
         return $this->animal;
     }
 
-    function getAnimalObject() {
+    function getAnimalObject() : AbstractAnimal{
         return SimpleAnimalFactory::getInstance()->createAnimal($this->getAnimal());
     }
 
@@ -80,5 +80,19 @@ class HerdEntry {
     function setCount($count) {
         $this->count = $count;
     }
+    
+    function getHerd(): Herd {
+        return $this->herd;
+    }
+
+    function setHerd(Herd $herd) {
+        $this->herd = $herd;
+    }
+
+    function getId() {
+        return $this->id;
+    }
+
+
 
 }

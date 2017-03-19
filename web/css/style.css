@@ -53,6 +53,7 @@ background:#6a7330;
 #menu a:hover {
 		margin-top:8px;
 		color:#f7f7f7;
+                text-decoration: underline;
 	}
 #tytul {
         background: #fff url(images/tytul.jpg) no-repeat;
@@ -98,6 +99,14 @@ background:#6a7330;
 		font-size:12px;
 		font-family:Verdana, Arial, Helvetica, sans-serif;
 	}
+#tresc p a {
+            color: #D77D00;
+            text-decoration: none;
+        }
+#tresc p a:hover {
+            color: #0059D6;
+            text-decoration: underline;
+        }
 #podpis {
 		background: url(images/podpis.jpg) no-repeat;
 		width:641px;
