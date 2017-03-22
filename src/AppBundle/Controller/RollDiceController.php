@@ -45,10 +45,10 @@ class RollDiceController extends Controller {
         if ($this->getUser()->canRollDice()) {
             $user = $this->getUser();
             $herd = $user->getHerd();
-            $this->get('app.game_rules');
+            $game_rules = $this->get('app.game_rules');
             $diceRepository = $this->get('app.dice_repository');
             $rollDice = $diceRepository->rollAllDices($herd);
-            $diceRepository->add($rollDice);
+            $game_rules->getRollDiceAction()->rollDiceInHerd($rollDice,$herd);
             /* TODO refactore it, move logic to repository/logic class */
             //$user->getHerd()->reproduce($em,$rollDice->getFirstAnimal(),$rollDice->getSecondAnimal());
             //$user->getHerd()->addAnimals("Rabbit",3,$em);

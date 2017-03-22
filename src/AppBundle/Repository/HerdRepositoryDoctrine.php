@@ -47,14 +47,24 @@ class HerdRepositoryDoctrine extends DoctrineRepository implements HerdRepositor
     private function getEntry(Herd $herd, AnimalType $animal) {
         $animalId = $animal->getId();
         $herdId = $herd->getId();
-        $query = $orm->createQuery(
+        $query = $this->getOrm()->createQuery(
                 'SELECT e'
-                . 'FROM AppBundle:HerdEntry e'
-                . 'WHERE e.herd_id = :givenHId'
-                . 'AND e.animal_id = :givenAId'
-                )->setParameter('givenHId',$herdId
-                )->setParameter('givenAId',$animalId);
+                . ' FROM AppBundle:HerdEntry e'
+                . ' WHERE e.herd = :givenH'
+                . ' AND e.animalType = :givenA'
+                )->setParameter('givenH',$herd
+                )->setParameter('givenA',$animal);
         return $query->setMaxResults(1)->getOneOrNullResult();
+    }
+    
+    public function getCount(Herd $herd, AnimalType $animal) : int{
+        $entry = $this->getEntry($herd, $animal);
+        if ($entry) {
+            return $entry->getCount();
+        }
+        else {
+            return 0;
+        }
     }
 
     public function addNewHerd(User $user, Herd $newHerd) {

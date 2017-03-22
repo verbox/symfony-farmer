@@ -16,5 +16,5 @@ use AppBundle\Entity\Herd;
  * @author learning
  */
 interface ReproduceAction extends BasicAction{
-    function reproduceAnimal(Herd $herd, array $animalTypes);
+    function reproduceAnimals(Herd $herd, array $animalTypes);
 }

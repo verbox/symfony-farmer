@@ -16,4 +16,5 @@ use AppBundle\GameRules\GameRulesDispatcher;
  */
 interface BasicAction {
     public function setGameRulesDispatcher(GameRulesDispatcher $dispatcher);
+    public function getGameRulesDispatcher() : GameRulesDispatcher;
 }

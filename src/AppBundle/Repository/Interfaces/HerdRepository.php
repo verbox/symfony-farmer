@@ -18,4 +18,5 @@ use AppBundle\Entity\User;
 interface HerdRepository{
     function addAnimalsToHerd(Herd $herd, AnimalType $animal, int $count);
     function addNewHerd(User $user, Herd $newHerd);
+    function getCount(Herd $herd, AnimalType $animal) : int;
 }
