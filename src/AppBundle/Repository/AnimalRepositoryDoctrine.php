@@ -8,12 +8,16 @@
 
 namespace AppBundle\Repository;
 
+use AppBundle\Repository\Interfaces\AnimalRepository;
+use AppBundle\Repository\Interfaces\DoctrineRepository;
+use Doctrine\ORM\EntityManager;
+
 /**
  * Description of AnimalRepositoryDoctrine
  *
  * @author learning
  */
-class AnimalRepositoryDoctrine extends Interfaces\DoctrineRepository implements Interfaces\AnimalRepository{
+class AnimalRepositoryDoctrine extends DoctrineRepository implements AnimalRepository{
     private $orm;
     
     function __construct(EntityManager $orm) {

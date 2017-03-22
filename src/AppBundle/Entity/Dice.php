@@ -26,8 +26,20 @@ class Dice {
      * @ORM\OneToMany(targetEntity="DiceSide",mappedBy="dice", cascade={"persist","remove"})
      */
     private $sides;
+    
+    /**
+     * @ORM\Column(type="string")
+     */
+    private $name;
+    function getName() {
+        return $this->name;
+    }
 
-    public function getId() {
+    function setName($name) {
+        $this->name = $name;
+    }
+
+        public function getId() {
         return $this->id;
     }
     

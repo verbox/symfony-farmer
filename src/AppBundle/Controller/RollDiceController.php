@@ -45,6 +45,7 @@ class RollDiceController extends Controller {
         if ($this->getUser()->canRollDice()) {
             $user = $this->getUser();
             $herd = $user->getHerd();
+            $this->get('app.game_rules');
             $diceRepository = $this->get('app.dice_repository');
             $rollDice = $diceRepository->rollAllDices($herd);
             $diceRepository->add($rollDice);

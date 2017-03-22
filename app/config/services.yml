@@ -1,7 +1,7 @@
 # Learn more about services, parameters and containers at
 # http://symfony.com/doc/current/service_container.html
-parameters:
-    #parameter_name: value
+#parameters:
+#    app.game_rules
 
 services:
     #service_name:
@@ -18,4 +18,12 @@ services:
     app.dice_repository:
         class: AppBundle\Repository\DiceRepositoryDoctrine
         arguments: ['@doctrine.orm.entity_manager']
+        
+    app.game_rules:
+        class: AppBundle\GameRules\GameRulesDispatcher
+        arguments: ['basic']
+        calls:
+            - [setHerdRepository,['@app.herd_repository']]
+            - [setAnimalRepository,['@app.animal_repository']]
+            - [setDiceRepository,['@app.dice_repository']]
     
