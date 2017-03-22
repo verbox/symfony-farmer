@@ -27,13 +27,14 @@ class RollDiceController extends Controller {
     public function rollDiceHistoryAction(Request $request)
     {
         $user = $this->getUser();
-        $roll_dices = array();
+        $rollDices = array();
+        $diceRepository = $this->get('app.dice_repository');
         if ($user->isHerdCreated()) 
         {
             $herd = $user->getHerd();
-            $roll_dices = $herd->getRollDiceActions()->toArray();
+            $rollDices = $herd->getRollDices();
         }
-        return $this->render('farmer/roll_dices/roll_dice_history.html.twig', array('rdh' => $roll_dices));
+        return $this->render('farmer/roll_dices/roll_dice_history.html.twig', array('rollDices' => $rollDices));
     }
     
     /**
@@ -44,11 +45,11 @@ class RollDiceController extends Controller {
         if ($this->getUser()->canRollDice()) {
             $user = $this->getUser();
             $herd = $user->getHerd();
-            $em = $this->getDoctrine()->getManager();
-
-            $rollDice = new RollDice(SimpleAnimalFactory::getInstance()->randomAnimals(2),$herd);
-            $em->persist($rollDice);
-            $em->flush();
+            $diceRepository = $this->get('app.dice_repository');
+            $rollDice = $diceRepository->rollAllDices($herd);
+            $diceRepository->add($rollDice);
+            /* TODO refactore it, move logic to repository/logic class */
+            //$user->getHerd()->reproduce($em,$rollDice->getFirstAnimal(),$rollDice->getSecondAnimal());
             //$user->getHerd()->addAnimals("Rabbit",3,$em);
             
         }

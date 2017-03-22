@@ -22,7 +22,6 @@ class AnimalType {
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @var long 
      */
     protected $id;
     
@@ -37,9 +36,39 @@ class AnimalType {
      */
     private $kind;
     
-//    /**
-//     * @ORM\
-//     */
-//    private $
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $canAttack;
+
+    function getName() {
+        return $this->name;
+    }
+
+    function getKind() {
+        return $this->kind;
+    }
+
+    function getCanAttack() {
+        return $this->canAttack;
+    }
+
+    function setName($name) {
+        $this->name = $name;
+    }
+
+    function setKind($kind) {
+        $this->kind = $kind;
+    }
+
+    function setCanAttack($canAttack) {
+        $this->canAttack = $canAttack;
+    }
+
+    function getId() {
+        return $this->id;
+    }
+
+
     
 }

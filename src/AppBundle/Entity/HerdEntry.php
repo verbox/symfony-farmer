@@ -29,10 +29,10 @@ class HerdEntry {
     protected $id;
     
     /**
-     * 
-     * @ORM\Column(type="string")
+     * @ORM\ManyToOne(targetEntity="AnimalType")
+     * @ORM\JoinColumn(name="animal_id", referencedColumnName="id")
      */
-    private $animal;
+    private $animalType;
     
     /**
      *
@@ -47,36 +47,32 @@ class HerdEntry {
      */
     private $herd;
 
-    function __construct(string $animal, int $count) {
-        if (SimpleAnimalFactory::getInstance()->isValidAnimalName($animal)) {
-            $this->animal = $animal;
+    function __construct(AnimalType $animal, int $count) {
+            $this->animalType = $animal;
             $this->count = $count;
-        } else {
-            throw new Exception("Problem with animals - bad animal name/object"
-            . "while creating new herd entry");
-        }
     }
 
-    function getAnimal() {
-        return $this->animal;
+    function getAnimalName() {
+        return $this->animalType->getName();
     }
 
     function getAnimalObject() : AbstractAnimal{
-        return SimpleAnimalFactory::getInstance()->createAnimal($this->getAnimal());
+        return SimpleAnimalFactory::getInstance()->createAnimal($this->getAnimalName());
     }
 
     function getCount() {
         return $this->count;
     }
-
-    function setAnimal($animal) {
-        $this->animal = $animal;
-        if (!array_key_exists($animal, SimpleAnimalFactory::getInstance()->getAllAnimalsName())) {
-            throw new Exception("Problem with animals - bad animal name/object"
-            . "while setting herd entry");
-        }
+    
+    function setAnimalType($animalType) {
+        $this->animalType = $animalType;
     }
 
+    function getAnimalType() {
+        return $this->animalType;
+    }
+
+    
     function setCount($count) {
         $this->count = $count;
     }

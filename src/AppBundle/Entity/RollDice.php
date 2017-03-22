@@ -8,14 +8,17 @@
 
 namespace AppBundle\Entity;
 
+use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\JoinColumn;
 
 /**
  * Description of RollDice
  *
  * Description of Herd
  * @ORM\Entity
- * @ORM\Table(name="roll_dice_actions")
+ * @ORM\Table(name="roll_dices")
  * @author learning
  */
 class RollDice {
@@ -23,14 +26,17 @@ class RollDice {
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @var long 
      */
     protected $id;
     
     /**
-     * @ORM\Column(type="simple_array")
+     * @ORM\ManyToMany(targetEntity="DiceSide")
+     * @ORM\JoinTable(name="roll_dices_sides",
+     *  joinColumns={@JoinColumn(name="roll_dice_id", referencedColumnName="id")},
+     *  inverseJoinColumns={@JoinColumn(name="dice_side_id",referencedColumnName="id")}
+     * )
      */
-    private $animals;
+    private $diceSides;
     
     /**
      * @ORM\Column(type="datetime")
@@ -38,52 +44,56 @@ class RollDice {
     private $time;
     
     /**
-     * @ORM\ManyToOne(targetEntity="Herd", inversedBy="rollDiceActions")
+     * @ORM\ManyToOne(targetEntity="Herd", inversedBy="rollDices")
      * @ORM\JoinColumn(name="herd_id", referencedColumnName = "id")
      */
-    private $herd;
+    private $herd;   
     
-    function __construct($animals, $herd) {
-        $this->animals = $animals;
+    function __construct(array $diceSides, Herd $herd) {
+        $this->time = new DateTime();
+        $this->diceSides = new ArrayCollection();
+        foreach($diceSides as $diceSide)
+        {
+            $this->diceSides->add($diceSide);
+        }
         $this->herd = $herd;
-        $this->time = new \DateTime();
     }
     
-    function getId(): long {
+    function getId() {
         return $this->id;
     }
 
-    function getAnimals() {
-        return $this->animals;
+    function getDiceSides() {
+        return $this->diceSides;
     }
 
     function getTime() {
         return $this->time;
     }
 
-    function setAnimals($animals) {
-        $this->animals = $animals;
+    function getHerd() {
+        return $this->herd;
+    }
+
+    function setId($id) {
+        $this->id = $id;
+    }
+
+    function setDiceSides($diceSides) {
+        $this->diceSides = $diceSides;
     }
 
     function setTime($time) {
         $this->time = $time;
     }
 
-    function getFirstAnimal(): string {
-        return $this->animals[0];
-    }
-
-    function getSecondAnimal(): string {
-        return $this->animals[1];
-    }
-    
-    function getHerd() {
-        return $this->herd;
-    }
-
     function setHerd($herd) {
         $this->herd = $herd;
     }
+
+
+
+
 
 
 }

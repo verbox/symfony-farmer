@@ -8,8 +8,11 @@
 
 namespace AppBundle\Repository;
 
+use AppBundle\Entity\AnimalType;
 use AppBundle\Entity\Herd;
+use AppBundle\Entity\HerdEntry;
 use AppBundle\Entity\User;
+use AppBundle\Repository\Interfaces\DoctrineRepository;
 use AppBundle\Repository\Interfaces\HerdRepository;
 use Doctrine\ORM\EntityManager;
 
@@ -18,27 +21,62 @@ use Doctrine\ORM\EntityManager;
  *
  * @author learning
  */
-class HerdRepositoryDoctrine implements HerdRepository {
-    private $orm;
+class HerdRepositoryDoctrine extends DoctrineRepository implements HerdRepository {
+    private $herdEntryRepositoryName;
     
     function __construct(EntityManager $orm) {
-        $this->orm = $orm;
-    }
-    
-    function getOrm() {
-        return $this->orm;
+        parent::__construct('AppBundle:Herd', $orm);
+        $this->herdEntryRepositoryName = 'AppBundle:HerdEntry';
     }
 
-    public function addAnimalsToHerd(Herd $herd, array $animal, int $count) {
-        
+    public function addAnimalsToHerd(Herd $herd, AnimalType $animal, int $count) {
+        $entry = $this->getEntry($herd, $animal);
+        if ($entry) {
+            $newCount = $entry->getCount();
+            $newCount += $count;
+            $entry->setCount($newCount);
+            $this->updateEntry($entry);
+        }
+        else {
+            //create new HerdEntry
+            $entry = new HerdEntry($animal, $count);
+            $this->addEntry($herd, $entry);
+        }
+    }
+    
+    private function getEntry(Herd $herd, AnimalType $animal) {
+        $animalId = $animal->getId();
+        $herdId = $herd->getId();
+        $query = $orm->createQuery(
+                'SELECT e'
+                . 'FROM AppBundle:HerdEntry e'
+                . 'WHERE e.herd_id = :givenHId'
+                . 'AND e.animal_id = :givenAId'
+                )->setParameter('givenHId',$herdId
+                )->setParameter('givenAId',$animalId);
+        return $query->setMaxResults(1)->getOneOrNullResult();
     }
 
     public function addNewHerd(User $user, Herd $newHerd) {
-        $this->orm->beginTransaction();
+        $this->getOrm()->beginTransaction();
         $newHerd->setUser($user);
-        $this->orm->persist($newHerd);
-        $this->orm->flush();
-        $this->orm->commit();
+        $this->getOrm()->persist($newHerd);
+        $this->getOrm()->flush();
+        $this->getOrm()->commit();
+    }
+    
+    private function updateEntry(HerdEntry $entry) {
+        $this->getOrm()->beginTransaction();
+        $this->getOrm()->flush();
+        $this->getOrm()->commit();
+    }
+    
+    private function addEntry(Herd $herd, HerdEntry $entry) {
+        $this->getOrm()->beginTransaction();
+        $entry->setHerd($herd);
+        $this->getOrm()->persist($entry);
+        $this->getOrm()->flush();
+        $this->getOrm()->commit();
     }
 
 }

@@ -5,17 +5,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 namespace AppBundle\Repository\Interfaces;
 
-use AppBundle\Entity\AnimalType;
 use AppBundle\Entity\Herd;
-use AppBundle\Entity\User;
+
 /**
- * Description of HerdRepository
  *
  * @author learning
  */
-interface HerdRepository{
-    function addAnimalsToHerd(Herd $herd, AnimalType $animal, int $count);
-    function addNewHerd(User $user, Herd $newHerd);
+interface DiceRepository {
+    public function rollAllDices(Herd $herd);
+    public function rollSelectedDices(array $dices, Herd $herd);
 }

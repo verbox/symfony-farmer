@@ -1,9 +1,13 @@
 <table>
         <tr><th>Data</th><th>Co wylosowano</th></tr>
-    {% for rd in rdh %}
+    {% for rollDice in rollDices %}
             <tr>
-                <td>{{rd.time.format('Y-m-d H:i')}}</td>
-                <td>{{rd.firstAnimal}}, {{rd.secondAnimal}}</td>
+                <td>{{rollDice.time.format('Y-m-d H:i')}}</td>
+                <td>
+                    {% for diceSide in rollDice.diceSides %}
+                        [{{diceSide.animalType.name}}]
+                    {% endfor %}
+                </td>
             </tr>
     {% endfor %}
   </table>

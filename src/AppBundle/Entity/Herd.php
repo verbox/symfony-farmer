@@ -15,116 +15,136 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
 use Doctrine\Common\Collections\Criteria;
+
 /**
  * Description of Herd
  * @ORM\Entity
  * @ORM\Table(name="herds")
  * @author learning
  */
-class Herd implements PackableHerd{
+class Herd implements PackableHerd {
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
-    
+
+    function getId() {
+        return $this->id;
+    }
+
     /**
      * @ORM\OneToOne(targetEntity="User", inversedBy="herd")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      * @var type 
      */
     private $user;
-    
+
     /**
      * @ORM\OneToMany(targetEntity="HerdEntry",mappedBy="herd", cascade={"persist","remove"})
      * @var type 
      */
     private $animalEntries;
-    
+
     /**
      * @ORM\OneToMany(targetEntity="RollDice",mappedBy="herd",cascade={"persist","remove"})
      */
-    private $rollDiceActions;
-    
+    private $rollDices;
+
     /**
      * @ORM\Column(type="string",name="name")
      */
     private $name;
-    
-    function getName() {
+
+    public function getName() {
         return $this->name;
     }
 
-    function setName($name) {
+    public function setName($name) {
         $this->name = $name;
     }
 
-    function __construct() {
+    public function __construct() {
         $this->animalEntries = new ArrayCollection();
-        $this->rollDiceActions = new ArrayCollection();
+        $this->rollDices = new ArrayCollection();
     }
-    
-    function getUser(): User {
+
+    public function getUser(): User {
         return $this->user;
     }
 
-    function getAnimalEntries(): PersistentCollection {
+    public function getAnimalEntries(): PersistentCollection {
         return $this->animalEntries;
     }
 
-    function setUser(User $user) {
+    public function setUser(User $user) {
         $this->user = $user;
     }
 
-    function setAnimalEntries(PersistentCollection $animalEntries) {
+    public function setAnimalEntries(PersistentCollection $animalEntries) {
         $this->animalEntries = $animalEntries;
     }
 
     public function getInternState(): InternHerdState {
         $herdState = new InternHerdState();
-        foreach($this->animalEntries->toArray() as $entry)
-        {
-            $herdState->addAnimal($entry->getAnimalObj(),$entry->getCount());
+        foreach ($this->animalEntries->toArray() as $entry) {
+            $herdState->addAnimal($entry->getAnimalObj(), $entry->getCount());
         }
         return $herdState;
     }
-    
-    public function addAnimals(string $animalName, int $animalCount, \Doctrine\ORM\EntityManager $em) {
-        if (Animal\SimpleAnimalFactory::getInstance()->isValidAnimalName($animalName))
-        {
-            //try to find entry
-            foreach($this->animalEntries->toArray() as $entry)
-            {
-                if ($entry->getAnimal()==$animalName) {
-                    $count = $entry->getCount();
-                    $count+=$animalCount;
-                    $entry->setCount($count);
-                    $em->flush();
-                    return;
-                }
-            }
-            
-            //create new entry
-            $newEntry = new HerdEntry(Animal\SimpleAnimalFactory::getInstance()->createAnimal($animalName), $animalCount);
-            $newEntry->setHerd($this);
-            $this->animalEntries->add($newEntry);
-            $em->persist($newEntry);
-            $em->flush();
 
-        }
-        else
-        {
-            throw new \Exception("BLAD");
-        }
-    }
-    
-    function getRollDiceActions() {
-        return $this->rollDiceActions;
+//    public function hasEntry(AnimalType $animalName): bool {
+//        return $this->animalEntries->
+//        return false;
+//    }
+//
+//    public function countAnimal(string $animalName): int {
+//        if (!$this->hasEntry($animalName)) {
+//            return 0;
+//        } else {
+//            $entry = $this->getEntry($animalName);
+//            return $entry->getCount();
+//        }
+//    }
+//
+//    public function getEntry(string $animalName): HerdEntry {
+//        if (Animal\SimpleAnimalFactory::getInstance()->isValidAnimalName($animalName)) {
+//            //try to find entry
+//            foreach ($this->animalEntries->toArray() as $entry) {
+//                if ($entry->getAnimalName() == $animalName) {
+//                    return $entry;
+//                }
+//            }
+//        }
+//        throw new \Exception("Błąd przy pobieraniu zwierzaków.");
+//    }
+//
+//    public function addAnimals(string $animalName, int $animalCount, \Doctrine\ORM\EntityManager $em) {
+//        
+//    }
+//
+//    public function reproduce(\Doctrine\ORM\EntityManager $em, string... $animals) {
+//        /* TODO: this must be refactorized */
+//        if ($animals[0] == $animals[1]) {
+//            $this->addAnimals($animals[0], 1, $em);
+//        } else {
+//            foreach ($animals as $animal) {
+//                $pairsCount = round((($this->countAnimal($animal) + 1) / 2), 0, PHP_ROUND_HALF_DOWN);
+//                if ($pairsCount > 0) {
+//                    $this->addAnimals($animal, $pairsCount, $em);
+//                }
+//            }
+//        }
+//    }
+
+    function getRollDices() {
+        return $this->rollDices;
     }
 
-    function setRollDiceActions($rollDiceActions) {
-        $this->rollDiceActions = $rollDiceActions;
+    function setRollDices($rollDices) {
+        $this->rollDices = $rollDices;
     }
 
 

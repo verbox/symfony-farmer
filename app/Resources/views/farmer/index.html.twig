@@ -1,13 +1,20 @@
 {% extends 'layout.html.twig' %}
 
+{#{% if herd is not null %}
+        {% block title_header %}
+            Zagroda <i>{{herd.name}}</i>
+        {% endblock %}
+{% endif %}#}
+
 {% block content %}
     {% if user is empty %}
-        <p>Zaloguj się do gry.</p>
+        <p><a href="{{path('fos_user_security_login')}}">Zaloguj się do gry</a></p>
         
     {% elseif herd is empty %}
         <p>Nie utworzono jeszcze zagrody.</p>
         <p><a href="{{path('herd_new')}}">Utwórz zagrodę</a></p>
     {% else %}
+
         {% if animal_entries is empty %}
         <p>W zagrodzie nie ma zwierząt.</p>
         {% else %}

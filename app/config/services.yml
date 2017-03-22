@@ -10,4 +10,12 @@ services:
     app.herd_repository:
         class: AppBundle\Repository\HerdRepositoryDoctrine
         arguments: ['@doctrine.orm.entity_manager']
+        
+    app.animal_repository:
+        class: AppBundle\Repository\AnimalRepositoryDoctrine
+        arguments: ['@doctrine.orm.entity_manager']
+        
+    app.dice_repository:
+        class: AppBundle\Repository\DiceRepositoryDoctrine
+        arguments: ['@doctrine.orm.entity_manager']
     

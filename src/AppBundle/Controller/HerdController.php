@@ -40,7 +40,6 @@ class HerdController extends Controller{
                 $animalEntries = $herd ->getAnimalEntries();
             }
         }
-        
         return $this->render('farmer/index.html.twig',array(
             'user' => $user, 'animal_entries' => $animalEntries,
             'herd' => $herd,
