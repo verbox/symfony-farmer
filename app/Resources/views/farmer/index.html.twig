@@ -18,7 +18,9 @@
         {% if animal_entries is empty %}
         <p>W zagrodzie nie ma zwierząt.</p>
         {% else %}
-            {{ include('farmer/_animal_list.html.twig',{'animal_entries' : animal_entries}) }}
+            {{ include('farmer/_animal_list.html.twig',{
+                'animal_entries' : animal_entries, 
+                'exchangeEntries': exchangeEntries}) }}
         {% endif %}
         {{ include('farmer/_animal_list_actions.html.twig') }}
     {% endif %}

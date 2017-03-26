@@ -89,4 +89,18 @@ class HerdRepositoryDoctrine extends DoctrineRepository implements HerdRepositor
         $this->getOrm()->commit();
     }
 
+    public function getExchangeOptionsForHerdEntry(HerdEntry $herdEntry): array {
+        $query = $this->getOrm()->createQuery(
+                'SELECT exentry'
+                . ' FROM AppBundle:ExchangeEntry exentry'
+                . ' WHERE (exentry.firstAnimal = :animal'
+                . ' AND exentry.firstCount <= :count)'
+                . ' OR (exentry.secondAnimal = :animal'
+                . ' AND exentry.secondCount <= :count)'
+                )->setParameter('animal',$herdEntry->getAnimalType()
+                )->setParameter('count',$herdEntry->getCount());
+        $result = $query->getResult();
+        return $result;
+    }
+
 }

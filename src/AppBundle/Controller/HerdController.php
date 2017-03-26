@@ -9,9 +9,11 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Herd;
+use AppBundle\Entity\HerdEntry;
+use Doctrine\Common\Collections\Collection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,17 +34,20 @@ class HerdController extends Controller{
         $user = NULL;
         $animalEntries = NULL;
         $herd = NULL;
+        $exchangeEntries = NULL;
         if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY'))
         {
             $user = $this->getUser();
             if ($user->isHerdCreated()) {
                 $herd = $user->getHerd();
-                $animalEntries = $herd ->getAnimalEntries();
+                $animalEntries = $herd ->getAnimalEntries(); 
+                /* TODO */
+                $exchangeEntries = NULL;
             }
         }
         return $this->render('farmer/index.html.twig',array(
             'user' => $user, 'animal_entries' => $animalEntries,
-            'herd' => $herd,
+            'herd' => $herd, 'exchangeEntries' => $exchangeEntries,
         ));
     }
     
@@ -76,7 +81,10 @@ class HerdController extends Controller{
          return $this->redirectToRoute("index_action");
     }
     
-    
+    private function generateExchangeEntries(HerdEntry $entry): array {
+        $herdRepository = $this->get('app.herd_repository');
+        return $herdRepository->getExchangeOptionsForHerdEntry($entry);
+    }
     
 
 }

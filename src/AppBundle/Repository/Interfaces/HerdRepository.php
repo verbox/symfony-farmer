@@ -9,6 +9,7 @@ namespace AppBundle\Repository\Interfaces;
 
 use AppBundle\Entity\AnimalType;
 use AppBundle\Entity\Herd;
+use AppBundle\Entity\HerdEntry;
 use AppBundle\Entity\User;
 /**
  * Description of HerdRepository
@@ -19,4 +20,5 @@ interface HerdRepository{
     function addAnimalsToHerd(Herd $herd, AnimalType $animal, int $count);
     function addNewHerd(User $user, Herd $newHerd);
     function getCount(Herd $herd, AnimalType $animal) : int;
+    function getExchangeOptionsForHerdEntry(HerdEntry $herdEntry) : array;
 }
