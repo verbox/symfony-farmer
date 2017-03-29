@@ -41,8 +41,7 @@ class HerdController extends Controller{
             if ($user->isHerdCreated()) {
                 $herd = $user->getHerd();
                 $animalEntries = $herd ->getAnimalEntries(); 
-                /* TODO */
-                $exchangeEntries = NULL;
+                $exchangeEntries = $this->generateAllFixedExchangeEntries($animalEntries);
             }
         }
         return $this->render('farmer/index.html.twig',array(
@@ -84,6 +83,21 @@ class HerdController extends Controller{
     private function generateExchangeEntries(HerdEntry $entry): array {
         $herdRepository = $this->get('app.herd_repository');
         return $herdRepository->getExchangeOptionsForHerdEntry($entry);
+    }
+    
+    private function generateAllFixedExchangeEntries(Collection $herdEntries): array {
+        $result = [];
+        foreach($herdEntries as $herdEntry)
+        {
+            $fixedExchangeEntries = [];
+            $exchangeEntries = $this->generateExchangeEntries($herdEntry);
+            foreach($exchangeEntries as $exchangeEntry) {
+                $fixedExchangeEntry = new \AppBundle\Model\FixedExchangeEntry($exchangeEntry, $herdEntry);
+                $fixedExchangeEntries[] = $fixedExchangeEntry;
+            }
+            $result[$herdEntry->getId()] = $fixedExchangeEntries;
+        }
+        return $result;
     }
     
 

@@ -5,19 +5,27 @@
             <th>Liczebność</th>
             <th>Wymień</th>
         </tr>
-{% for entry in animal_entries %}
-    <tr>
-        
-        <td> {{entry.animalType.name}}
-        </td>
-        
-        <td>
-            {{entry.count}}
-        </td>
-        <td>
-            <a href='#'>Wymień</a></td>
-    </tr>
-    
-{% endfor %}
-    </table>
-</div>
+        {% for entry in animal_entries %}
+            <tr>
+
+                <td> {{entry.animalType.name}}
+                </td>
+
+                <td>
+                    {{entry.count}}
+                </td>
+                <td>
+                    {%for fExchangeEntry in exchangeEntries[entry.id]%}
+                        <a href='{{path("exchange_action",
+                            {"herdEntryId": entry.id,
+                             "exchangeEntryId": fExchangeEntry.exchangeEntry.id
+                            })
+                           }}'>
+                           [{{fExchangeEntry.myAnimalCount}} szt.→{{fExchangeEntry.otherAnimalCount}} szt. {{fExchangeEntry.otherAnimal.name[:3]|upper}}]</a>
+                        {%endfor%}
+                        </td>
+                        </tr>
+
+                    {% endfor %}
+                    </table>
+                    </div>

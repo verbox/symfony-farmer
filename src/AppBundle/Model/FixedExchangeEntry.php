@@ -51,6 +51,7 @@ class FixedExchangeEntry {
     
     public function __construct(ExchangeEntry $xchange, HerdEntry $entry) {
         $this->entry = $entry;
+        $this->exchangeEntry=$xchange;
         $this->myAnimal=$entry->getAnimalType();
         if ($xchange->getFirstAnimal()==$this->myAnimal) {
             $this->otherAnimal=$xchange->getSecondAnimal();

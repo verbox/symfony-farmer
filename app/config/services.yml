@@ -19,6 +19,10 @@ services:
         class: AppBundle\Repository\DiceRepositoryDoctrine
         arguments: ['@doctrine.orm.entity_manager']
         
+    app.repository_context:
+        class: AppBundle\Repository\RepositoryContext
+        arguments: ['@app.animal_repository','@app.dice_repository','@app.herd_repository']
+        
     app.game_rules:
         class: AppBundle\GameRules\GameRulesDispatcher
         arguments: ['basic']
