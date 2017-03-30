@@ -8,8 +8,10 @@
 
 namespace AppBundle\GameRules;
 
+use AppBundle\GameRules\ActionInterfaces\ExchangeAction;
 use AppBundle\GameRules\ActionInterfaces\ReproduceAction;
 use AppBundle\GameRules\ActionInterfaces\RollDiceAction;
+use AppBundle\GameRules\BasicGameRules\BasicExchangeAction;
 use AppBundle\GameRules\BasicGameRules\BasicReproduceAction;
 use AppBundle\GameRules\BasicGameRules\BasicRollDiceAction;
 
@@ -25,6 +27,10 @@ class BasicRulesActionBuilder implements RulesActionBuilder{
 
     public function createRollDiceAction(): RollDiceAction {
         return new BasicRollDiceAction();
+    }
+
+    public function createExchangeAction(): ExchangeAction {
+        return new BasicExchangeAction();
     }
 
 }

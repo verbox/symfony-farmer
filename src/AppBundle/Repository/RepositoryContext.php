@@ -32,10 +32,17 @@ class RepositoryContext {
      */
     private $herdRepository;
     
-    public function __construct(Interfaces\AnimalRepository $animalRepository, Interfaces\DiceRepository $diceRepository, Interfaces\HerdRepository $herdRepository) {
+    /**
+     *
+     * @var Interfaces\ExchangeRepository
+     */
+    private $exchangeRepository;
+    
+    public function __construct(Interfaces\AnimalRepository $animalRepository, Interfaces\DiceRepository $diceRepository, Interfaces\HerdRepository $herdRepository, Interfaces\ExchangeRepository $exchangeRepository) {
         $this->animalRepository = $animalRepository;
         $this->diceRepository = $diceRepository;
         $this->herdRepository = $herdRepository;
+        $this->exchangeRepository = $exchangeRepository;
     }
     
     public function getAnimalRepository(): Interfaces\AnimalRepository {
@@ -50,6 +57,8 @@ class RepositoryContext {
         return $this->herdRepository;
     }
 
-
+    public function getExchangeRepository(): Interfaces\ExchangeRepository {
+        return $this->exchangeRepository;
+    }
 
 }

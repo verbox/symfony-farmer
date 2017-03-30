@@ -8,6 +8,7 @@
 
 namespace AppBundle\GameRules;
 
+use AppBundle\GameRules\ActionInterfaces\ExchangeAction;
 use AppBundle\GameRules\ActionInterfaces\ReproduceAction;
 use AppBundle\GameRules\ActionInterfaces\RollDiceAction;
 
@@ -18,4 +19,5 @@ use AppBundle\GameRules\ActionInterfaces\RollDiceAction;
 interface RulesActionBuilder {
     public function createRollDiceAction() : RollDiceAction;
     public function createReproduceAction() : ReproduceAction;
+    public function createExchangeAction(): ExchangeAction;
 }

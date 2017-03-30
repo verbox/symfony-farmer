@@ -9,6 +9,7 @@
 namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -28,15 +29,26 @@ class ExchangeController extends Controller{
      *                      "exchangeEntryId":"\d+"
      *                      }
      *        )
-     * 
+     * @Security("has_role('ROLE_USER')")
      * @param \AppBundle\Controller\Request $request
      * @param type $herdEntryId
      * @param type $exchangeEntryId
      * @return type
      */
-    public function exchangeAction(Request $request, $herdEntryId, $exchangeEntryId)
+    public function exchangeAction(Request $request, int $herdEntryId, int $exchangeEntryId)
     {
-        /*TODO*/
+        //checking if given herd entry is part of logged user's herd
+        $user = $this->getUser();
+        $herd = $user->getHerd();
+        $herdRepository = $this->get("app.herd_repository");
+        $repositoryContext = $this->get("app.repository_context");
+        $herdEntry = $herdRepository->getHerdEntry($herdEntryId);
+        $exchangeEntry = $repositoryContext->getExchangeRepository()->getById($exchangeEntryId);
+        if (!$herdEntry || !$exchangeEntry || $herdEntry->getHerd()!=$herd)
+        {
+            
+        }
+        
         return $this->redirectToRoute("index_action");
     }
 }

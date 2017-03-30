@@ -17,11 +17,9 @@ use Doctrine\ORM\EntityManager;
  *
  * @author learning
  */
-class AnimalRepositoryDoctrine extends DoctrineRepository implements AnimalRepository{
-    private $orm;
-    
+class AnimalRepositoryDoctrine extends DoctrineRepository implements AnimalRepository{    
     function __construct(EntityManager $orm) {
-        parent::__construct($orm,'AppBundle:AnimalType');
+        parent::__construct('AppBundle:AnimalType',$orm);
     }
 
     public function getAnimalTypeByName(string $animalName) {

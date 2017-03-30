@@ -14,7 +14,9 @@ div {
     position:relative;
 }
 
-
+a {
+    text-decoration: none;
+}
 
 #kontener {
     width:780px;

@@ -37,7 +37,7 @@ abstract class DoctrineRepository implements GeneralRepository{
     }
     
      public function getById(int $id) {
-        return $this->getOrm()->getRepository($this->getEntityRepository())->find($id);
+        return $this->getEntityRepository()->find($id);
     }
     
      public function getByQuery(Query $query)

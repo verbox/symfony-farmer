@@ -18,7 +18,9 @@ use AppBundle\Entity\User;
  */
 interface HerdRepository{
     function addAnimalsToHerd(Herd $herd, AnimalType $animal, int $count);
+    function removeAnimalsFromHerd(Herd $herd, AnimalType $animal, int $count):bool;
+    function removeAllAnimals(Herd $herd, AnimalType $animal);
     function addNewHerd(User $user, Herd $newHerd);
     function getCount(Herd $herd, AnimalType $animal) : int;
-    function getExchangeOptionsForHerdEntry(HerdEntry $herdEntry) : array;
+    function getHerdEntry(int $id);
 }

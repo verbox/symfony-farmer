@@ -8,6 +8,15 @@
 
 namespace AppBundle\GameRules;
 
+use AppBundle\GameRules\ActionInterfaces\ExchangeAction;
+use AppBundle\GameRules\ActionInterfaces\ReproduceAction;
+use AppBundle\GameRules\ActionInterfaces\RollDiceAction;
+use AppBundle\Repository\Interfaces\AnimalRepository;
+use AppBundle\Repository\Interfaces\DiceRepository;
+use AppBundle\Repository\Interfaces\ExchangeRepository;
+use AppBundle\Repository\Interfaces\HerdRepository;
+use AppBundle\Repository\RepositoryContext;
+
 /**
  * Description of GameRulesDispatcher
  *
@@ -16,93 +25,73 @@ namespace AppBundle\GameRules;
 class GameRulesDispatcher {
     /**
      *
-     * @var ActionInterfaces\RollDiceAction
+     * @var RollDiceAction
      */
     private $rollDiceAction;
     
     /**
      *
-     * @var ActionInterfaces\ReproduceAction
+     * @var ReproduceAction
      */
     private $reproduceAction;
     
     /**
      *
-     * @var \AppBundle\Repository\Interfaces\HerdRepository
+     * @var ExchangeAction
      */
-    private $herdRepository;
+    private $exchangeAction;
     
     /**
      *
-     * @var \AppBundle\Repository\Interfaces\AnimalRepository
+     * @var RepositoryContext
      */
-    private $animalRepository;
+    private $repositoryContext;
     
-    /**
-     *
-     * @var \AppBundle\Repository\Interfaces\DiceRepository
-     */
-    private $diceRepository;
-    
-    public function __construct(string $rulesName)
+    public function __construct(string $rulesName, RepositoryContext $repositoryContext)
     {
         $builder = RulesActionBuilderFactory::getBuilder($rulesName);
+        $this->repositoryContext = $repositoryContext;
         /*
          * build actions
          */
         //roll dice action
-        $this->setRollDiceAction($builder->createRollDiceAction());
+        $this->rollDiceAction = $builder->createRollDiceAction();
         $this->getRollDiceAction()->setGameRulesDispatcher($this);
         //reproduce action
-        $this->setReproduceAction($builder->createReproduceAction());
+        $this->reproduceAction = $builder->createReproduceAction();
         $this->getReproduceAction()->setGameRulesDispatcher($this);
+        //exchange action
+        $this->exchangeAction = $builder->createExchangeAction();
+        $this->getExchangeAction()->setGameRulesDispatcher($this);
     }
     
-    public function getRollDiceAction(): ActionInterfaces\RollDiceAction {
+    public function getRollDiceAction(): RollDiceAction {
         return $this->rollDiceAction;
     }
 
-    public function getReproduceAction(): ActionInterfaces\ReproduceAction {
+    public function getReproduceAction(): ReproduceAction {
         return $this->reproduceAction;
     }
-
-    private function setRollDiceAction(ActionInterfaces\RollDiceAction $rollDiceAction) {
-        $this->rollDiceAction = $rollDiceAction;
+    
+    public function getExchangeAction(): ExchangeAction {
+        return $this->exchangeAction;
     }
 
-    private function setReproduceAction(ActionInterfaces\ReproduceAction $reproduceAction) {
-        $this->reproduceAction = $reproduceAction;
+        
+    /* REPOSITORIES */
+    function getHerdRepository(): HerdRepository {
+        return $this->repositoryContext->getHerdRepository();
+    }
+
+    function getAnimalRepository(): AnimalRepository {
+        return $this->repositoryContext->getAnimalRepository();
+    }
+
+    function getDiceRepository(): DiceRepository {
+        return $this->repositoryContext->getDiceRepository();
     }
     
-    function getHerdRepository(): \AppBundle\Repository\Interfaces\HerdRepository {
-        return $this->herdRepository;
-    }
-
-    function getAnimalRepository(): \AppBundle\Repository\Interfaces\AnimalRepository {
-        return $this->animalRepository;
-    }
-
-    function getDiceRepository(): \AppBundle\Repository\Interfaces\DiceRepository {
-        return $this->diceRepository;
-    }
-
-    function setHerdRepository(\AppBundle\Repository\Interfaces\HerdRepository $herdRepository) {
-        $this->herdRepository = $herdRepository;
-    }
-
-    function setAnimalRepository(\AppBundle\Repository\Interfaces\AnimalRepository $animalRepository) {
-        $this->animalRepository = $animalRepository;
-    }
-
-    function setDiceRepository(\AppBundle\Repository\Interfaces\DiceRepository $diceRepository) {
-        $this->diceRepository = $diceRepository;
-    }
-
-
-    
-
-
-
-    
-    
+    function getExchangeRepository(): ExchangeRepository {
+        return $this->repositoryContext->getExchangeRepository();
+    } 
 }

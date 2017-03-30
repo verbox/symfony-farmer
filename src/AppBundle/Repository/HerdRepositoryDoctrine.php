@@ -88,19 +88,51 @@ class HerdRepositoryDoctrine extends DoctrineRepository implements HerdRepositor
         $this->getOrm()->flush();
         $this->getOrm()->commit();
     }
+    
+    private function removeEntry(Herd $herd, HerdEntry $entry) {
+        $this->getOrm()->beginTransaction();
+        $this->getOrm()->remove($entry);
+        $this->getOrm()->flush();
+        $this->getOrm()->commit();
+    }
 
-    public function getExchangeOptionsForHerdEntry(HerdEntry $herdEntry): array {
-        $query = $this->getOrm()->createQuery(
-                'SELECT exentry'
-                . ' FROM AppBundle:ExchangeEntry exentry'
-                . ' WHERE (exentry.firstAnimal = :animal'
-                . ' AND exentry.firstCount <= :count)'
-                . ' OR (exentry.secondAnimal = :animal'
-                . ' AND exentry.secondCount <= :count)'
-                )->setParameter('animal',$herdEntry->getAnimalType()
-                )->setParameter('count',$herdEntry->getCount());
-        $result = $query->getResult();
-        return $result;
+
+
+    public function getHerdEntry(int $id) {
+        $herdEntryEntityRepository = $this->getOrm()->getRepository($this->herdEntryRepositoryName);
+        return $herdEntryEntityRepository->find($id);
+    }
+
+    public function removeAnimalsFromHerd(Herd $herd, AnimalType $animal, int $count): bool {
+        $entry = $this->getEntry($herd, $animal);
+        if (!$entry) {
+            throw new \Exception("Proba usuniecia zwierzecia, ktorego nie ma w stadzie.");
+        }
+        $entryCount = $entry->getCount();
+        //remove
+        $newCount = $entryCount - $count;
+        if ($newCount > 0) {
+            $entry->setCount($newCount);
+            $this->updateEntry($entry);
+            return true;
+        }
+        if ($newCount == 0) {
+            $this->removeEntry($herd, $entry);
+            return true;
+        }
+        if ($newCount < 0) {
+            throw new \Exception("Proba usuniecia wiekszej liczby zwierzat niz mozna");
+        }
+        return false;
+    }
+    
+    public function removeAllAnimals(Herd $herd, AnimalType $animal) {
+        $entry = $this->getEntry($herd, $animal);
+        if (!$entry) {
+            throw new \Exception("Proba usuniecia zwierzecia, ktorego nie ma w stadzie.");
+        }
+        $entryCount = $entry->getCount();
+        $this->removeAnimalsFromHerd($herd, $animal, $entryCount);
     }
 
 }

@@ -81,8 +81,8 @@ class HerdController extends Controller{
     }
     
     private function generateExchangeEntries(HerdEntry $entry): array {
-        $herdRepository = $this->get('app.herd_repository');
-        return $herdRepository->getExchangeOptionsForHerdEntry($entry);
+        $exchangeRepository = $this->get('app.exchange_repository');
+        return $exchangeRepository->getExchangeOptionsForHerdEntry($entry);
     }
     
     private function generateAllFixedExchangeEntries(Collection $herdEntries): array {
