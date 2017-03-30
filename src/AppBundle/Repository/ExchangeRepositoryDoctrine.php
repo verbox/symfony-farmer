@@ -8,7 +8,7 @@
 
 namespace AppBundle\Repository;
 
-use AppBundle\Entity\ExchangeEntry;
+use AppBundle\Entity\ExchangeEntryAction;
 use AppBundle\Entity\HerdEntry;
 use AppBundle\Repository\Interfaces\DoctrineRepository;
 use AppBundle\Repository\Interfaces\ExchangeRepository;
@@ -38,4 +38,11 @@ class ExchangeRepositoryDoctrine extends DoctrineRepository implements ExchangeR
         $result = $query->getResult();
         return $result;
     }
+
+    public function addExchangeEntryAction(ExchangeEntryAction $action) {
+        $this->getOrm()->beginTransaction();
+        $this->getOrm()->persist($action);
+        $this->getOrm()->commit();
+    }
+
 }

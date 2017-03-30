@@ -92,12 +92,29 @@ class ExchangeEntry {
         return new FixedExchangeEntry($this,$entry);
     }
     
-    public function getOtherAnimal(HerdEntry $entry) : AnimalType {
-        
+    public function hasAnimal(AnimalType $animal): bool {
+        return ($this->firstAnimal == $animal 
+                || $this->secondAnimal == $animal);
     }
     
-    public function getOtherAnimalCount(HerdEntry $entry) :int {
-        
+    public function getMyAnimalCount(AnimalType $animal): int {
+        if ($this->getFirstAnimal() == $animal) {
+            return $this->getFirstCount();
+        }
+        if ($this->getSecondAnimal() == $animal) {
+            return $this->getSecondCount();
+        }
+        return -1;
+    }
+    
+    public function getOtherAnimalCount(AnimalType $animal): int {
+        if ($this->getFirstAnimal() == $animal) {
+            return $this->getSecondCount();
+        }
+        if ($this->getSecondAnimal() == $animal) {
+            return $this->getFirstCount();
+        }
+        return -1;
     }
 
 

@@ -44,10 +44,13 @@ class ExchangeController extends Controller{
         $repositoryContext = $this->get("app.repository_context");
         $herdEntry = $herdRepository->getHerdEntry($herdEntryId);
         $exchangeEntry = $repositoryContext->getExchangeRepository()->getById($exchangeEntryId);
-        if (!$herdEntry || !$exchangeEntry || $herdEntry->getHerd()!=$herd)
-        {
-            
+        if (!$herdEntry || !$exchangeEntry || $herdEntry->getHerd()!=$herd){
+            $this->addFlash('error', "Nieprawidłowe identyfikatory w żądaniu.");
+            return $this->redirectToRoute("index_action");
         }
+        //get exchangeAction object
+        $gameRules = $this->get('app.game_rules');
+        $gameRules->getExchangeAction()->exchangeAnimals($user,$herd,$herdEntry,$exchangeEntry);
         
         return $this->redirectToRoute("index_action");
     }

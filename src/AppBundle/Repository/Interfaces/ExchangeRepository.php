@@ -8,6 +8,7 @@
 
 namespace AppBundle\Repository\Interfaces;
 
+use AppBundle\Entity\ExchangeEntryAction;
 use AppBundle\Entity\HerdEntry;
 
 /**
@@ -17,4 +18,5 @@ use AppBundle\Entity\HerdEntry;
 interface ExchangeRepository {
 
     function getExchangeOptionsForHerdEntry(HerdEntry $herdEntry) : array;
+    function addExchangeEntryAction(ExchangeEntryAction $action);
 }

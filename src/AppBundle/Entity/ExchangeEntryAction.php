@@ -41,4 +41,45 @@ class ExchangeEntryAction {
      * @ORM\Column(type="datetime")
      */
     private $time;
+    
+    public function __construct(HerdEntry $herdEntry, ExchangeEntry $exchangeEntry) {
+        $this->herdEntry = $herdEntry;
+        $this->exchangeEntry = $exchangeEntry;
+        $this->time = new \DateTime();
+    }
+    
+    public function getId() {
+        return $this->id;
+    }
+
+    public function getHerdEntry(): HerdEntry {
+        return $this->herdEntry;
+    }
+
+    public function getExchangeEntry(): ExchangeEntry {
+        return $this->exchangeEntry;
+    }
+
+    public function getTime() {
+        return $this->time;
+    }
+
+    public function setId($id) {
+        $this->id = $id;
+    }
+
+    public function setHerdEntry(HerdEntry $herdEntry) {
+        $this->herdEntry = $herdEntry;
+    }
+
+    public function setExchangeEntry(ExchangeEntry $exchangeEntry) {
+        $this->exchangeEntry = $exchangeEntry;
+    }
+
+    public function setTime($time) {
+        $this->time = $time;
+    }
+
+
+
 }

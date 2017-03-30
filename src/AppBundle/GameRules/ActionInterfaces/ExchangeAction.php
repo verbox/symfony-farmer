@@ -8,12 +8,17 @@
 
 namespace AppBundle\GameRules\ActionInterfaces;
 
+use AppBundle\Entity\ExchangeEntry;
+use AppBundle\Entity\Herd;
+use AppBundle\Entity\HerdEntry;
+use AppBundle\Entity\User;
+
 /**
  * Description of ExchangeAction
  *
  * @author learning
  */
 interface ExchangeAction extends BasicAction{
-    public function exchangeAnimals(\AppBundle\Entity\User $user, \AppBundle\Entity\Herd $herd, 
-    AppBundle\Entity\HerdEntry $herdEntry, \AppBundle\Model\Logic\ExchangeEntry $exchangeEntry) : bool;
+    public function exchangeAnimals(User $user, Herd $herd, 
+    HerdEntry $herdEntry, ExchangeEntry $exchangeEntry) : bool;
 }
