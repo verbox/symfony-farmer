@@ -52,11 +52,23 @@ class RollDiceController extends Controller {
             /* TODO refactore it, move logic to repository/logic class */
             //$user->getHerd()->reproduce($em,$rollDice->getFirstAnimal(),$rollDice->getSecondAnimal());
             //$user->getHerd()->addAnimals("Rabbit",3,$em);
-            
+            $this->addFlash('roll_msg',$this->prepareLastRollMsg($rollDice));
         }
         else {
             $this->addFlash('error', 'Nie możesz rzucić kostką');
         }
-        return $this->redirectToRoute("roll_dice_history");
+        return $this->redirectToRoute("index_action");
+    }
+    
+    private function prepareLastRollMsg(RollDice $rollDice) 
+    {
+        $result = "Wylosowano ";
+        //get first animal
+        foreach($rollDice->getDiceSides() as $diceSide)
+        {
+            $result=$result.
+                    \sprintf("[%s]",$diceSide->getAnimalType()->getName());
+        }
+        return $result;
     }
 }

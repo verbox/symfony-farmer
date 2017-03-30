@@ -44,6 +44,15 @@ class HerdRepositoryDoctrine extends DoctrineRepository implements HerdRepositor
         }
     }
     
+    private function getFarmAnimals() : array {
+        $query = $this->getOrm()->createQuery(
+                'SELECT a'
+                . ' FROM AppBundle:AnimalType a'
+                . ' WHERE a.kind IN (:kinds)'
+                )->setParameter('kinds', AnimalType::FARM_ANIMALS_KIND);
+        return $query->getResult();
+    }
+    
     private function getEntry(Herd $herd, AnimalType $animal) {
         $animalId = $animal->getId();
         $herdId = $herd->getId();
@@ -73,6 +82,18 @@ class HerdRepositoryDoctrine extends DoctrineRepository implements HerdRepositor
         $this->getOrm()->persist($newHerd);
         $this->getOrm()->flush();
         $this->getOrm()->commit();
+        $this->addNewHerdAllEntries($newHerd);
+    }
+    
+    private function addNewHerdAllEntries(Herd $newHerd) {
+        $this->getOrm()->beginTransaction();
+        foreach($this->getFarmAnimals() as $animal) {
+            $herdEntry = new HerdEntry($animal, 0);
+            $herdEntry->setHerd($newHerd);
+            $this->getOrm()->persist($herdEntry);
+        }
+        $this->getOrm()->flush();
+        $this->getOrm()->commit();
     }
     
     private function updateEntry(HerdEntry $entry) {
@@ -88,15 +109,6 @@ class HerdRepositoryDoctrine extends DoctrineRepository implements HerdRepositor
         $this->getOrm()->flush();
         $this->getOrm()->commit();
     }
-    
-    private function removeEntry(Herd $herd, HerdEntry $entry) {
-        $this->getOrm()->beginTransaction();
-        $this->getOrm()->remove($entry);
-        $this->getOrm()->flush();
-        $this->getOrm()->commit();
-    }
-
-
 
     public function getHerdEntry(int $id) {
         $herdEntryEntityRepository = $this->getOrm()->getRepository($this->herdEntryRepositoryName);
@@ -111,13 +123,9 @@ class HerdRepositoryDoctrine extends DoctrineRepository implements HerdRepositor
         $entryCount = $entry->getCount();
         //remove
         $newCount = $entryCount - $count;
-        if ($newCount > 0) {
+        if ($newCount >= 0) {
             $entry->setCount($newCount);
             $this->updateEntry($entry);
-            return true;
-        }
-        if ($newCount == 0) {
-            $this->removeEntry($herd, $entry);
             return true;
         }
         if ($newCount < 0) {

@@ -40,7 +40,7 @@ class HerdController extends Controller{
             $user = $this->getUser();
             if ($user->isHerdCreated()) {
                 $herd = $user->getHerd();
-                $animalEntries = $herd ->getAnimalEntries(); 
+                $animalEntries = $herd ->getNotEmptyAnimalEntries(); 
                 $exchangeEntries = $this->generateAllFixedExchangeEntries($animalEntries);
             }
         }
@@ -58,10 +58,10 @@ class HerdController extends Controller{
     {
         if(!$this->getUser()->isHerdCreated()){
         $herd = new Herd();
-        $herd->setName("Wpisz tutaj nazwę swojego nowego zwierzyńca.");
+        $herd->setName("");
         
         $form = $this->createFormBuilder($herd)
-                ->add('name', TextType::class)
+                ->add('name', TextType::class, array('label' => 'Nazwa zagrody'))
                 ->add('save', SubmitType::class, array('label' => 'Utwórz'))
                 ->getForm();
         

@@ -17,6 +17,6 @@ use AppBundle\Entity\RollDice;
  */
 interface RollDiceAction extends BasicAction{
     
-    public function rollDiceInHerd(RollDice $rollDices, Herd $herd);
+    public function rollDiceInHerd(RollDice $rollDices, Herd $herd) : RollDice;
     public function doRollDice(string $type);
 }

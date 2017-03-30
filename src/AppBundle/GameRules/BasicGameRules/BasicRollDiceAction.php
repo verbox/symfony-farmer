@@ -25,7 +25,7 @@ class BasicRollDiceAction implements RollDiceAction{
         
     }
 
-    public function rollDiceInHerd(RollDice $rollDice, Herd $herd) {       
+    public function rollDiceInHerd(RollDice $rollDice, Herd $herd) : RollDice {       
         //check if there is bad animal
         $firstDice = $rollDice->getDiceSides()->get(0);
         $secondDice = $rollDice->getDiceSides()->get(1);
@@ -39,6 +39,7 @@ class BasicRollDiceAction implements RollDiceAction{
         }
         $diceRepository = $this->getGameRulesDispatcher()->getDiceRepository();
         $diceRepository->add($rollDice);
+        return $rollDice;
     }
 
     public function setGameRulesDispatcher(GameRulesDispatcher $dispatcher) {

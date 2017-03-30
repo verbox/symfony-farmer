@@ -10,11 +10,11 @@ namespace AppBundle\Entity;
 
 use AppBundle\Model\Herd\InternHerdState;
 use AppBundle\Model\Herd\PackableHerd;
-use AppBundle\Model\Animal;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
-use Doctrine\Common\Collections\Criteria;
 
 /**
  * Description of Herd
@@ -44,6 +44,7 @@ class Herd implements PackableHerd {
 
     /**
      * @ORM\OneToMany(targetEntity="HerdEntry",mappedBy="herd", cascade={"persist","remove"})
+     * @ORM\OrderBy({"id"="ASC"})
      * @var type 
      */
     private $animalEntries;
@@ -75,8 +76,14 @@ class Herd implements PackableHerd {
         return $this->user;
     }
 
-    public function getAnimalEntries(): PersistentCollection {
+    public function getAnimalEntries(): Collection {
         return $this->animalEntries;
+    }
+    
+    public function getNotEmptyAnimalEntries(): Collection {
+        $criteria = Criteria::create()
+                ->where(Criteria::expr()->neq("count", 0));
+        return $this->animalEntries->matching($criteria);
     }
 
     public function setUser(User $user) {

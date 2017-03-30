@@ -18,6 +18,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class AnimalType {
     
+    const FARM_ANIMALS_KIND = ["NORMAL","GUARD"]; 
+    
      /**
      * @ORM\Id
      * @ORM\Column(type="integer")

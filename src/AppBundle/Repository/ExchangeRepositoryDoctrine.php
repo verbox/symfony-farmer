@@ -42,6 +42,7 @@ class ExchangeRepositoryDoctrine extends DoctrineRepository implements ExchangeR
     public function addExchangeEntryAction(ExchangeEntryAction $action) {
         $this->getOrm()->beginTransaction();
         $this->getOrm()->persist($action);
+        $this->getOrm()->flush();
         $this->getOrm()->commit();
     }
 

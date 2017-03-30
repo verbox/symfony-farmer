@@ -18,6 +18,7 @@
         {% if animal_entries is empty %}
         <p>W zagrodzie nie ma zwierząt.</p>
         {% else %}
+            {{ include('farmer/roll_dices/_new_roll_msg_box.html.twig')}}
             {{ include('farmer/_animal_list.html.twig',{
                 'animal_entries' : animal_entries, 
                 'exchangeEntries': exchangeEntries}) }}
